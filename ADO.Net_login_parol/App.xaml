@@ -1,0 +1,9 @@
+﻿<Application x:Class="ADO.Net_login_parol.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ADO.Net_login_parol"
+             StartupUri="Views/MainView.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
