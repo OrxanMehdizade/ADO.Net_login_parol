@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using System.Data;
 
 namespace ADO.Net_login_parol.Views
 {
@@ -37,13 +29,63 @@ namespace ADO.Net_login_parol.Views
             };
             window.ShowDialog();
 
-            Window mainWindow = Window.GetWindow(mainView);
-            mainWindow.Close();
+  
         }
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
             OpenSignUpWindow();
+            
+
         }
 
+
+        private bool SignIn(string username, string password)
+        {
+            string connectionString;
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("DBConnection.json");
+            var config = builder.Build();
+            connectionString = config.GetConnectionString("ConnectionString")!;
+
+            bool isMatch = false;
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM [User] WHERE Login = @Username AND Password = @Password";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+                    command.Parameters.AddWithValue("@Password", password);
+
+                    int result = (int)command.ExecuteScalar();
+
+                    if (result > 0)
+                    {
+                        isMatch = true;
+                    }
+                }
+            }
+
+            return isMatch;
+        }
+
+        private void SignIn_Click(object sender, RoutedEventArgs e)
+        {
+            string username = txtUsername.Text;
+            string password = txtPassword.Text;
+
+            if (SignIn(username, password))
+            {
+                MessageBox.Show("Giriş başarılı!");
+            }
+            else
+            {
+                MessageBox.Show("Giriş başarısız!");
+            }
+
+        }
     }
 }

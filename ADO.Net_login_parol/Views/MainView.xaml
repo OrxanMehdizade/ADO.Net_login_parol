@@ -27,13 +27,13 @@
     </Window.Resources>
     <Grid Background="#00a884">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="500" Height="350" Background="#00a884">
-            <TextBox Style="{DynamicResource TextBox}">
+            <TextBox x:Name="txtUsername" Style="{DynamicResource TextBox}">
                 <TextBox.ToolTip>Login</TextBox.ToolTip>
             </TextBox>
-            <TextBox Style="{DynamicResource TextBox}">
+            <TextBox x:Name="txtPassword" Style="{DynamicResource TextBox}">
                 <TextBox.ToolTip>Pasword</TextBox.ToolTip>
             </TextBox>
-            <Button Style="{DynamicResource Signstyle}" Content="Sign In"></Button>
+            <Button Style="{DynamicResource Signstyle}" Content="Sign In" Click="SignIn_Click"></Button>
             <Button Style="{DynamicResource Signstyle}" Content="Sign Up" Click="SignUpButton_Click"></Button>
         </StackPanel>
     </Grid>
