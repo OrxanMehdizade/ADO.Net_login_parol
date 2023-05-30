@@ -13,16 +13,16 @@ namespace ADO.Net_login_parol.Views
     /// </summary>
     public partial class MainView : Window
     {
-        
+
         private SqlConnection conn;
         string connectionString;
         public MainView()
         {
             InitializeComponent();
-            var builder =new ConfigurationBuilder();
+            var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("DBConection.json");
-            var config=builder.Build();
+            var config = builder.Build();
             connectionString = config.GetConnectionString("UserConnection")!;
             conn = new SqlConnection(connectionString);
         }
@@ -51,8 +51,8 @@ namespace ADO.Net_login_parol.Views
             string userLogin = txtUsername.Text;
             string password = txtPassword.Text;
 
-            
-            
+
+
 
             bool isAuthenticated = AuthenticateUser(userLogin, password);
 
@@ -68,21 +68,13 @@ namespace ADO.Net_login_parol.Views
         }
         private void OpenSignUpWindow()
         {
-            SignUp signUpWindow = new SignUp();
-            Window window = new Window
-            {
-                Title = "Sign Up",
-                Content = signUpWindow,
-                Width = 800,
-                Height = 450
-            };
-            window.ShowDialog();
-
+            SignUpWindow signUpWindow = new SignUpWindow();
+            Window.GetWindow(this).Close();
+            signUpWindow.Show();
         }
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
             OpenSignUpWindow();
-
         }
     }
 }

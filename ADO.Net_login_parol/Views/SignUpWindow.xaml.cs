@@ -13,20 +13,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ADO.Net_login_parol.Views
 {
     /// <summary>
-    /// Interaction logic for SignUp.xaml
+    /// Interaction logic for SignUpWindow.xaml
     /// </summary>
-    public partial class SignUp : UserControl
+    public partial class SignUpWindow : Window
     {
         //private SqlDataReader sqlDataReader;
         private SqlConnection conn;
         string connectionString;
-        public SignUp()
+        public SignUpWindow()
         {
             InitializeComponent();
             var builder = new ConfigurationBuilder();
@@ -42,6 +41,18 @@ namespace ADO.Net_login_parol.Views
             try
             {
                 conn.Open();
+
+                string checkQuery = "SELECT COUNT(*) FROM [User] WHERE [Login] = @UserLogin AND [Password] = @Password";
+                SqlCommand checkCmd = new SqlCommand(checkQuery, conn);
+                checkCmd.Parameters.AddWithValue("@UserLogin", userLogin);
+                checkCmd.Parameters.AddWithValue("@Password", password);
+                int duplicateCount = (int)checkCmd.ExecuteScalar();
+
+                if (duplicateCount > 0)
+                {
+                    MessageBox.Show("These credentials already exist. Please choose different credentials.");
+                    return false;
+                }
                 string query = "INSERT INTO [User] ([Login], [Password]) VALUES (@UserLogin, @Password)";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@UserLogin", userLogin);
@@ -60,7 +71,7 @@ namespace ADO.Net_login_parol.Views
             string userLogin = LoginSignUp.Text;
             string password = password1.Text;
             string pass2 = password2.Text;
-            if(password == pass2)
+            if (password == pass2)
             {
                 if (string.IsNullOrEmpty(userLogin) || string.IsNullOrEmpty(password))
                 {
@@ -85,5 +96,6 @@ namespace ADO.Net_login_parol.Views
             }
 
         }
+
     }
 }
